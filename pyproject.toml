@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "downloadagent"
+version = "0.1.0"
+description = "A telegram bot to help you download content to your local storage."
+authors = ["EstrellaXD <estrellaxd05@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiohttp = "^3.9.1"
+python-dotenv = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
