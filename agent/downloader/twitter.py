@@ -2,6 +2,7 @@ from agent.network import RequestContent
 import re
 from agent.config import TW_DL_PATH
 from urllib3.util import parse_url
+import asyncio
 
 
 async def save_tw_media(url: str, session: RequestContent):
@@ -20,3 +21,4 @@ async def dl_tw_media(url: str):
         tasks = [save_tw_media(url, request) for url in contents]
         # Run tasks
         await asyncio.gather(*tasks)
+

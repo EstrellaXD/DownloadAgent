@@ -58,6 +58,17 @@ async def x(message):
     await bot.send_message(message.chat.id, "Download finished")
 
 
+@bot.message_handler(regexp="https://telegra.ph")
+async def telegraph(message):
+    if message.chat.id != config.user_id:
+        return
+    await bot.send_message(message.chat.id, "Start downloading images")
+    logger.info(f"Start downloading images in {message.text}")
+    await image.download(message.text)
+    await bot.send_message(message.chat.id, "Download finished")
+    logger.info(f"Finish downloading")
+
+
 # Keywords Listener
 @bot.message_handler(func=lambda message: True)
 async def echo(message):
