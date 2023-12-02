@@ -31,4 +31,6 @@ COPY . .
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["tini", "-g", "--", "/entrypoint.sh"]
 
+ENV CONTAINER=1
+
 VOLUME ["/downloads"]

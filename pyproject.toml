@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "downloadagent"
-version = "0.1.0"
+version = "0.1.1"
 description = "A telegram bot to help you download content to your local storage."
 authors = ["EstrellaXD <estrellaxd05@gmail.com>"]
 license = "MIT"
