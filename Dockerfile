@@ -8,7 +8,6 @@ ENV LANG="C.UTF-8" \
     UMASK=022
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install -r requirements.txt
 RUN set -ex && \
     apk add --no-cache \
         bash \
