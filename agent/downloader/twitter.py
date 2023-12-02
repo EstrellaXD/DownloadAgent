@@ -7,6 +7,7 @@ import asyncio
 
 async def save_tw_media(url: str, session: RequestContent):
     content = await session.get(url)
+    TW_DL_PATH.mkdir(parents=True, exist_ok=True)
     path = TW_DL_PATH.joinpath(parse_url(url).path.split('/')[-1])
     with open(path, 'wb') as f:
         f.write(content)

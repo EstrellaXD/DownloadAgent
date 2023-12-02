@@ -21,7 +21,13 @@ You must have a telegram bot. If you don't have one, you can create one by talki
 ### Deploy as a docker container
 
 ```bash
-docker run -d 
+docker run -d \
+    --name DownloadAgent \
+    -e BOT_TOKEN=<your bot token> \
+    -e USER_ID=<your tg user id> \
+    -e PROXY=<your proxy> \
+    -v <your download path>:/downloads \
+    ghcr.io/estrellaxd/downloadagent
 ```
 
 ### Run directly on your computer
