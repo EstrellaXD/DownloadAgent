@@ -11,6 +11,7 @@ python = "^3.11"
 aiohttp = "^3.9.1"
 python-dotenv = "^1.0.0"
 aioqb = "^0.1.1"
+pytube = "^15.0.0"
 
 
 [build-system]
