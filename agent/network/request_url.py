@@ -14,6 +14,20 @@ class RequestContent:
         ) as response:
             return await response.read()
 
+    async def get_text(self, url):
+        async with self.session.get(
+                url,
+                proxy=self.proxy,
+        ) as response:
+            return await response.text()
+
+    async def get_json(self, url):
+        async with self.session.get(
+                url,
+                proxy=self.proxy,
+        ) as response:
+            return await response.json()
+
     async def __aenter__(self):
         self.session = ClientSession()
         return self

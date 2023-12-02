@@ -10,7 +10,7 @@ You can deploy it as a docker container or run it directly on your computer.
 - [x] Download magnet links
 - [x] Download torrent links
 - [ ] Download youtube videos
-- [ ] Download x(formally twitter) videos
+- [x] Download x(formally twitter) videos
 
 ... in working
 

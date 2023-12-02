@@ -4,8 +4,7 @@ import asyncio
 from pathlib import Path
 from urllib3.util import parse_url
 from urllib.parse import unquote
-
-IMAGE_PATH = Path("Image")
+from agent.config import IMAGE_DL_PATH
 
 
 class ImageDownloader:
@@ -36,7 +35,7 @@ class ImageDownloader:
     async def download(self, url: str):
         img_urls = await self.__get_image_urls(url)
         folder_name = unquote(parse_url(url).path.replace('/', ''))
-        save_dir = IMAGE_PATH.joinpath(folder_name)
+        save_dir = IMAGE_DL_PATH.joinpath(folder_name)
         tasks = [self.__save_image(save_dir, img_url) for img_url in img_urls]
         return await asyncio.gather(*tasks)
         # for img_url in img_urls:
