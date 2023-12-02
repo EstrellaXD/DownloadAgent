@@ -1,9 +1,8 @@
 from telebot.async_telebot import AsyncTeleBot, ExceptionHandler
 from telebot import asyncio_helper
-from aioqb import Client
 
 from agent.config import config
-from agent.downloader import ImageDownloader, send_torrent, send_magent
+from agent.downloader import ImageDownloader, send_torrent, send_magent, dl_tw_media
 import logging
 
 
@@ -16,7 +15,8 @@ bot = AsyncTeleBot(
     # exception_handler=ExceptionHandler(),
     # colorful_logs=True
 )
-asyncio_helper.proxy = config.proxy
+if config.proxy:
+    asyncio_helper.proxy = config.proxy
 
 
 @bot.message_handler(commands=['start'])
@@ -38,6 +38,24 @@ async def torrent(message):
         return
     await bot.send_message(message.chat.id, "Start downloading")
     await send_torrent(message.text)
+
+
+@bot.message_handler(regexp="https://twitter.com")
+async def twitter(message):
+    if message.chat.id != config.user_id:
+        return
+    await bot.send_message(message.chat.id, "Start downloading")
+    await dl_tw_media(message.text)
+    await bot.send_message(message.chat.id, "Download finished")
+
+
+@bot.message_handler(regexp="https://x.com")
+async def x(message):
+    if message.chat.id != config.user_id:
+        return
+    await bot.send_message(message.chat.id, "Start downloading")
+    await dl_tw_media(message.text)
+    await bot.send_message(message.chat.id, "Download finished")
 
 
 # Keywords Listener
