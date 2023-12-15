@@ -2,7 +2,7 @@ from telebot.async_telebot import AsyncTeleBot, ExceptionHandler
 from telebot import asyncio_helper
 
 from agent.config import config
-from agent.downloader import ImageDownloader, send_torrent, send_magent, dl_tw_media
+from agent.downloader import ImageDownloader, send_torrent, send_magent, dl_tw_media, download_url
 import logging
 
 
@@ -36,55 +36,66 @@ async def magnet(message):
 async def torrent(message):
     if message.chat.id != config.user_id:
         return
-    await bot.send_message(message.chat.id, "Start downloading")
+    await bot.send_message(message.chat.id, "Start downloading...")
     await send_torrent(message.text)
 
 
+@bot.message_handler(regexp="https://x.com")
 @bot.message_handler(regexp="https://twitter.com")
 async def twitter(message):
     if message.chat.id != config.user_id:
         return
-    await bot.send_message(message.chat.id, "Start downloading")
+    reply = await bot.reply_to(message, "Start downloading...")
     await dl_tw_media(message.text)
-    await bot.send_message(message.chat.id, "Download finished")
-
-
-@bot.message_handler(regexp="https://x.com")
-async def x(message):
-    if message.chat.id != config.user_id:
-        return
-    await bot.send_message(message.chat.id, "Start downloading")
-    await dl_tw_media(message.text)
-    await bot.send_message(message.chat.id, "Download finished")
+    await bot.edit_message_text("Download completed.", chat_id=message.chat.id, message_id=reply.message_id)
 
 
 @bot.message_handler(regexp="https://telegra.ph")
 async def telegraph(message):
     if message.chat.id != config.user_id:
         return
-    await bot.send_message(message.chat.id, "Start downloading images")
+    reply = await bot.reply_to(message, "Start downloading images...")
     logger.info(f"Start downloading images in {message.text}")
     await image.download(message.text)
-    await bot.send_message(message.chat.id, "Download finished")
-    logger.info(f"Finish downloading")
+    await bot.edit_message_text("Download completed.", chat_id=message.chat.id, message_id=reply.message_id)
+    logger.info(f"Download completed.")
+
+
+# Photo Listener
+@bot.message_handler(content_types=['video'])
+@bot.message_handler(content_types=['photo'])
+async def photo(message):
+    # Download all photo and video
+    if message.chat.id != config.user_id:
+        return
+    # Download photos
+    photos = message.json.get("photo", None)
+    videos = message.json.get("video", None)
+    source = photos[-1] if photos else videos[-1]
+    file_id = source["file_id"]
+    url = await bot.get_file_url(file_id)
+    logger.info(f"Start downloading media in {url}")
+    reply = await bot.reply_to(message, "Start downloading media...")
+    await download_url(url)
+    await bot.edit_message_text("Download completed", chat_id=message.chat.id, message_id=reply.message_id)
+    logger.info(f"Download completed.")
 
 
 # Keywords Listener
 @bot.message_handler(func=lambda message: True)
-async def echo(message):
+async def download_forward(message):
     if message.chat.id != config.user_id:
         return
-    # await bot.send_message(message.chat.id, message.text)
-    # URL encoding with UTF-8
     entities = message.json["entities"]
+    url = None
     for entitie in entities:
         if entitie["type"] == "text_link":
             url = entitie["url"]
             break
     if "https://telegra.ph" in url:
-        reply = await bot.reply_to(message, "Start downloading images")
+        reply = await bot.reply_to(message, "Start downloading images...")
         logger.info(f"Start downloading images in {url}")
         await image.download(url)
-        await bot.edit_message_text("Download finished", chat_id=message.chat.id, message_id=reply.message_id)
-        logger.info(f"Finish downloading")
+        await bot.edit_message_text("Download completed.", chat_id=message.chat.id, message_id=reply.message_id)
+        logger.info(f"Download completed.")
 
