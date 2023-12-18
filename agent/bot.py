@@ -2,7 +2,7 @@ from telebot.async_telebot import AsyncTeleBot, ExceptionHandler
 from telebot import asyncio_helper
 
 from agent.config import config
-from agent.downloader import ImageDownloader, send_torrent, send_magent, dl_tw_media, download_url
+from agent.downloader import ImageDownloader, send_torrent, send_magent, dl_tw_media, download_url, dl_yt_video
 import logging
 
 
@@ -47,6 +47,15 @@ async def twitter(message):
         return
     reply = await bot.reply_to(message, "Start downloading...")
     await dl_tw_media(message.text)
+    await bot.edit_message_text("Download completed.", chat_id=message.chat.id, message_id=reply.message_id)
+
+
+@bot.message_handler(regexp="https://www.youtube.com")
+async def youtube(message):
+    if message.chat.id != config.user_id:
+        return
+    reply = await bot.reply_to(message, "Start downloading...")
+    await dl_yt_video(message.text)
     await bot.edit_message_text("Download completed.", chat_id=message.chat.id, message_id=reply.message_id)
 
 

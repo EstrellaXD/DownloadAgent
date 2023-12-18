@@ -16,3 +16,4 @@ soupsieve==2.5
 typing_extensions==4.8.0
 urllib3==2.1.0
 yarl==1.9.3
+pytube==15.0.0
