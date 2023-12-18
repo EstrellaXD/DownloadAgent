@@ -7,9 +7,9 @@ You can deploy it as a docker container or run it directly on your computer.
 ## Now support
 
 - [x] Download telegra.ph photos
-- [x] Download magnet links
+- [x] Download magnet links via [qbittorrent](https://www.qbittorrent.org/)
 - [x] Download torrent links
-- [ ] Download youtube videos
+- [x] Download youtube videos
 - [x] Download x(formally twitter) videos
 
 ... in working
@@ -44,4 +44,14 @@ pip install -r requirements.txt
 python main.py
 ```
 
+## Environment variables
+
+| Name        | Description               | Default | required |
+|-------------|---------------------------|---------|----------|
+| BOT_TOKEN   | Your telegram bot token   | None    | True     |
+| USER_ID     | Your telegram user id     | None    | True     |
+| PROXY       | Your proxy                | None    | False    |
+| QB_HOST     | Your qbittorrent host     | None    | False    |
+| QB_USERNAME | Your qbittorrent username | None    | False    |
+| QB_PASSWORD | Your qbittorrent password | None    | False    |
 
