@@ -15,10 +15,3 @@ async def download_video(url):
 
     # 在异步函数中调用同步函数，并确保不会阻塞主事件循环
     await loop.run_in_executor(None, sync_download, url)
-
-
-if __name__ == '__main__':
-    async def main():
-        await download_video('https://www.youtube.com/watch?v=6qb7KWnmF-s')
-
-    asyncio.run(main())

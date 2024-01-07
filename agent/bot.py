@@ -2,7 +2,7 @@ from telebot.async_telebot import AsyncTeleBot, ExceptionHandler
 from telebot import asyncio_helper
 
 from agent.config import config
-from agent.downloader import ImageDownloader, send_torrent, send_magent, dl_tw_media, download_url, dl_yt_video
+from agent.downloader import ImageDownloader, send_torrent, send_magent, dl_tw_media, download_url, dl_yt_video, CompressedDownloader
 import logging
 
 
@@ -88,6 +88,22 @@ async def photo(message):
     await download_url(url)
     await bot.edit_message_text("Download completed", chat_id=message.chat.id, message_id=reply.message_id)
     logger.info(f"Download completed.")
+
+
+@bot.message_handler(content_types=['document'])
+async def file(message):
+    if message.chat.id != config.user_id:
+        return
+    file_id = message.json["document"]["file_id"]
+    url = await bot.get_file_url(file_id)
+    if url.endswith(".zip"):
+        reply = await bot.reply_to(message, "Start downloading zip...")
+        logger.info(f"Start downloading zip in {url}")
+        downloader = CompressedDownloader()
+        await downloader.download_and_extract(url)
+        await bot.edit_message_text("Download completed", chat_id=message.chat.id, message_id=reply.message_id)
+        logger.info(f"Download completed.")
+        return
 
 
 # Keywords Listener
